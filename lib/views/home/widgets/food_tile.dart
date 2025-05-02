@@ -8,9 +8,10 @@ import 'package:foodly/constants/constants.dart';
 import 'package:foodly/models/foods_model.dart';
 
 class FoodTile extends StatelessWidget {
-  FoodTile({super.key, required this.food});
+  FoodTile({super.key, required this.food, this.color});
 
   final FoodsModel food;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class FoodTile extends StatelessWidget {
               height: 70.h,
               width: width,
               decoration: BoxDecoration(
-                  color: kOffWhite, borderRadius: BorderRadius.circular(9.r)),
+                  color: color??kOffWhite, borderRadius: BorderRadius.circular(9.r)),
               child: Container(
                 padding: EdgeInsets.all(4.r),
                 child: Row(
@@ -80,7 +81,7 @@ class FoodTile extends StatelessWidget {
                           width: width * 0.7,
                           height: 15.h,
                           child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
+                              scrollDirection: Axis.horizontal,
                               itemCount: food.additives.length,
                               itemBuilder: (context, i) {
                                 Additive additive = food.additives[i];
@@ -95,8 +96,10 @@ class FoodTile extends StatelessWidget {
                                   child: Center(
                                     child: Padding(
                                       padding: EdgeInsets.all(2.h),
-                                      child: ReusableText(text: additive.title, 
-                                      style: appStyle(8, kGray, FontWeight.w400)),
+                                      child: ReusableText(
+                                          text: additive.title,
+                                          style: appStyle(
+                                              8, kGray, FontWeight.w400)),
                                     ),
                                   ),
                                 );
