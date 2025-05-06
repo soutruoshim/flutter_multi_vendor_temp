@@ -5,16 +5,20 @@ import 'package:foodly/common/app_style.dart';
 import 'package:foodly/common/reusable_text.dart';
 import 'package:foodly/constants/constants.dart';
 import 'package:foodly/models/restaurants_model.dart';
+import 'package:foodly/views/restaurant/restaurant_page.dart';
+import 'package:get/get.dart';
 
 class RestaurantTile extends StatelessWidget {
-  RestaurantTile({super.key, required this.restaurant});
+  const RestaurantTile({super.key, required this.restaurant});
 
   final RestaurantsModel restaurant;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Get.to(() =>  RestaurantPage(restaurant: restaurant));
+        },
         child: Stack(
           clipBehavior: Clip.hardEdge,
           children: [
@@ -96,10 +100,10 @@ class RestaurantTile extends StatelessWidget {
                 width: 60.w,
                 height: 19.h,
                 decoration: BoxDecoration(
-                    color: restaurant.isAvailable ||
-                            restaurant.isAvailable == null
-                        ? kPrimary
-                        : kSecondaryLight,
+                    color:
+                        restaurant.isAvailable || restaurant.isAvailable == null
+                            ? kPrimary
+                            : kSecondaryLight,
                     borderRadius: BorderRadius.circular(10.r)),
                 child: Center(
                   child: ReusableText(
