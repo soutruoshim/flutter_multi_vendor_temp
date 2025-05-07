@@ -32,6 +32,7 @@ class _FoodPageState extends State<FoodPage> {
   Widget build(BuildContext context) {
     final hookResult = useFetchRestaurant(widget.food.restaurant);
     final controller = Get.put(FoodController());
+    controller.loadAdditives(widget.food.additives);
     return Scaffold(
       body: ListView(
         padding: EdgeInsets.zero,
@@ -130,7 +131,7 @@ class _FoodPageState extends State<FoodPage> {
                     Obx(
                       () => ReusableText(
                           text:
-                              "\$ ${widget.food.price * controller.count.value}",
+                              "\$ ${((widget.food.price + controller.additivePrice) * controller.count.value)}",
                           style: appStyle(18, kPrimary, FontWeight.w600)),
                     )
                   ],
@@ -180,33 +181,39 @@ class _FoodPageState extends State<FoodPage> {
                 SizedBox(
                   height: 10.h,
                 ),
-                Column(
-                  children:
-                      List.generate(widget.food.additives.length, (index) {
-                    final additive = widget.food.additives[index];
-                    return CheckboxListTile(
-                        contentPadding: EdgeInsets.zero,
-                        visualDensity: VisualDensity.compact,
-                        dense: true,
-                        activeColor: kSecondary,
-                        value: true,
-                        tristate: false,
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ReusableText(
-                                text: additive.title,
-                                style: appStyle(11, kDark, FontWeight.w400)),
-                            SizedBox(
-                              width: 5.w,
-                            ),
-                            ReusableText(
-                                text: "\$ ${additive.price}",
-                                style: appStyle(11, kPrimary, FontWeight.w600)),
-                          ],
-                        ),
-                        onChanged: (bool? value) {});
-                  }),
+                Obx(
+                  () => Column(
+                    children:
+                        List.generate(controller.additivesList.length, (index) {
+                      final additive = controller.additivesList[index];
+                      return CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          visualDensity: VisualDensity.compact,
+                          dense: true,
+                          activeColor: kSecondary,
+                          value: additive.isChecked.value,
+                          tristate: false,
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ReusableText(
+                                  text: additive.title,
+                                  style: appStyle(11, kDark, FontWeight.w400)),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              ReusableText(
+                                  text: "\$ ${additive.price}",
+                                  style:
+                                      appStyle(11, kPrimary, FontWeight.w600)),
+                            ],
+                          ),
+                          onChanged: (bool? value) {
+                            additive.toggleChecked();
+                            controller.getTotalPrice();
+                          });
+                    }),
+                  ),
                 ),
                 SizedBox(
                   height: 20.h,
