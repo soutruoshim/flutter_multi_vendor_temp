@@ -7,7 +7,7 @@ import 'package:foodly/common/custom_container.dart';
 import 'package:foodly/common/custom_text_field.dart';
 import 'package:foodly/common/shimmers/foodlist_shimmer.dart';
 import 'package:foodly/constants/constants.dart';
-import 'package:foodly/controllers/search_controller.dart';
+import 'package:foodly/controllers/search_results_controller.dart';
 import 'package:foodly/views/search/loading_widget.dart';
 import 'package:foodly/views/search/search_results.dart';
 import 'package:get/get.dart';

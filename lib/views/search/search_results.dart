@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodly/constants/constants.dart';
-import 'package:foodly/controllers/search_controller.dart';
+import 'package:foodly/controllers/search_results_controller.dart';
 import 'package:foodly/models/foods_model.dart';
 import 'package:foodly/views/home/widgets/food_tile.dart';
 import 'package:get/get.dart';
