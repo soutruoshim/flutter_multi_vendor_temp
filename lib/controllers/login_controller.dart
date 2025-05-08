@@ -58,9 +58,11 @@ class LoginController extends GetxController {
               duration: const Duration(milliseconds: 900));
         }
 
-        Get.offAll(() => MainScreen(),
-            transition: Transition.fade,
-            duration: const Duration(milliseconds: 900));
+        if (data.verification == true) {
+          Get.offAll(() => MainScreen(),
+              transition: Transition.fade,
+              duration: const Duration(milliseconds: 900));
+        }
       } else {
         var error = apiErrorFromJson(response.body);
 
@@ -76,8 +78,21 @@ class LoginController extends GetxController {
 
   void logout() {
     box.erase();
-     Get.offAll(() => MainScreen(),
-            transition: Transition.fade,
-            duration: const Duration(milliseconds: 900));
+    Get.offAll(() => MainScreen(),
+        transition: Transition.fade,
+        duration: const Duration(milliseconds: 900));
+  }
+
+  LoginResponse? getUserInfo() {
+    String? userId = box.read("userId");
+    String? data;
+    if (userId != null) {
+      data = box.read(userId.toString());
+    }
+
+    if (data != null) {
+      return loginResponseFromJson(data);
+    }
+    return null;
   }
 }

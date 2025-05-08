@@ -32,8 +32,9 @@ class RegistrationController extends GetxController {
 
         setLoading = false;
 
-        Get.snackbar(
-            "You are succefully registered", data.message,
+        Get.back();
+
+        Get.snackbar("You are succefully registered", data.message,
             colorText: kLightWhite,
             backgroundColor: kPrimary,
             icon: const Icon(Ionicons.fast_food_outline));
