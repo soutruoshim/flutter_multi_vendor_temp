@@ -6,7 +6,9 @@ import 'package:foodly/common/back_ground_container.dart';
 import 'package:foodly/common/custom_button.dart';
 import 'package:foodly/common/reusable_text.dart';
 import 'package:foodly/constants/constants.dart';
+import 'package:foodly/models/registration_model.dart';
 import 'package:foodly/views/auth/widget/email_textfield.dart';
+import 'package:foodly/views/auth/widget/password_textfield.dart';
 import 'package:lottie/lottie.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -18,6 +20,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   late final TextEditingController _emailController = TextEditingController();
+  late final TextEditingController _userController = TextEditingController();
   late final TextEditingController _passwordController =
       TextEditingController();
 
@@ -63,13 +66,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 child: Column(
                   children: [
                     EmailTextField(
-                      hintText: "Email",
+                      hintText: "Username",
+                      keyboardType: TextInputType.text,
                       prefixIcon: const Icon(
-                        CupertinoIcons.mail,
+                        CupertinoIcons.profile_circled,
                         size: 22,
                         color: kGrayLight,
                       ),
-                      controller: _emailController,
+                      controller: _userController,
                     ),
                     SizedBox(
                       height: 25.h,
@@ -83,26 +87,29 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                       controller: _emailController,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                              onTap: () {},
-                              child: ReusableText(
-                                  text: "Register",
-                                  style: appStyle(
-                                      12, Colors.blue, FontWeight.normal))),
-                        ],
-                      ),
+                    SizedBox(
+                      height: 25.h,
+                    ),
+                    PasswordTextField(
+                      controller: _passwordController,
                     ),
                     SizedBox(
                       height: 30.h,
                     ),
                     CustomButton(
-                      text: "L O G I N",
-                      onTap: () {},
+                      text: "R E G I S T E R",
+                      onTap: () {
+                        if (_emailController.text.isNotEmpty &&
+                            _userController.text.isNotEmpty &&
+                            _passwordController.text.length >= 8) {
+                          RegistrationModel model = RegistrationModel(
+                              username: _userController.text,
+                              email: _emailController.text,
+                              password: _passwordController.text);
+
+                          String data = registrationModelToJson(model);
+                        }
+                      },
                       btnHeight: 35.h,
                       btnWidth: width,
                     ),

@@ -10,7 +10,7 @@ class EmailTextField extends StatelessWidget {
       this.keyboardType,
       this.initialValue,
       this.controller, this.hintText, this.prefixIcon});
-
+   
   final void Function()? onEditingComplete;
   final TextInputType? keyboardType;
   final String? initialValue;
@@ -34,7 +34,7 @@ class EmailTextField extends StatelessWidget {
           return null;
         }
       },
-      style: appStyle(12, kGray, FontWeight.normal),
+      style: appStyle(12, kDark, FontWeight.normal),
       decoration: InputDecoration(
         hintText: hintText,
         prefixIcon: prefixIcon,

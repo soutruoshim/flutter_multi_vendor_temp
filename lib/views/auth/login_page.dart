@@ -6,8 +6,10 @@ import 'package:foodly/common/back_ground_container.dart';
 import 'package:foodly/common/custom_button.dart';
 import 'package:foodly/common/reusable_text.dart';
 import 'package:foodly/constants/constants.dart';
+import 'package:foodly/models/login_model.dart';
 import 'package:foodly/views/auth/registration_page.dart';
 import 'package:foodly/views/auth/widget/email_textfield.dart';
+import 'package:foodly/views/auth/widget/password_textfield.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -76,14 +78,8 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 25.h,
                     ),
-                    EmailTextField(
-                      hintText: "Email",
-                      prefixIcon: const Icon(
-                        CupertinoIcons.mail,
-                        size: 22,
-                        color: kGrayLight,
-                      ),
-                      controller: _emailController,
+                    PasswordTextField(
+                      controller: _passwordController,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
@@ -93,9 +89,9 @@ class _LoginPageState extends State<LoginPage> {
                           GestureDetector(
                               onTap: () {
                                 Get.to(() => const RegistrationPage(),
-                                transition: Transition.fadeIn,
-                                duration: const Duration(milliseconds: 1200)
-                                );
+                                    transition: Transition.fadeIn,
+                                    duration:
+                                        const Duration(milliseconds: 1200));
                               },
                               child: ReusableText(
                                   text: "Register",
@@ -110,9 +106,18 @@ class _LoginPageState extends State<LoginPage> {
                     CustomButton(
                       text: "L O G I N",
                       onTap: () {
-                        Get.to(() => const LoginPage(),
-                            transition: Transition.cupertino,
-                            duration: const Duration(milliseconds: 900));
+                        if (_emailController.text.isNotEmpty &&
+                            _passwordController.text.length >= 8) {
+                          LoginModel model = LoginModel(
+                              email: _emailController.text,
+                              password: _passwordController.text);
+
+                          String data = loginModelToJson(model);
+
+                        
+
+                          //Login function
+                        }
                       },
                       btnHeight: 35.h,
                       btnWidth: width,
