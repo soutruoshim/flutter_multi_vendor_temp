@@ -10,8 +10,11 @@ import 'package:foodly/common/reusable_text.dart';
 import 'package:foodly/common/verification_modal.dart';
 import 'package:foodly/constants/constants.dart';
 import 'package:foodly/controllers/foods_controller.dart';
+import 'package:foodly/controllers/login_controller.dart';
 import 'package:foodly/hooks/fetch_restaurant.dart';
 import 'package:foodly/models/foods_model.dart';
+import 'package:foodly/models/login_response.dart';
+import 'package:foodly/views/auth/login_page.dart';
 import 'package:foodly/views/restaurant/restaurant_page.dart';
 import 'package:get/get.dart';
 
@@ -30,8 +33,12 @@ class _FoodPageState extends State<FoodPage> {
 
   @override
   Widget build(BuildContext context) {
+    LoginResponse? user;
     final hookResult = useFetchRestaurant(widget.food.restaurant);
     final controller = Get.put(FoodController());
+    final loginController = Get.put(LoginController());
+
+    user = loginController.getUserInfo();
     controller.loadAdditives(widget.food.additives);
     return Scaffold(
       body: ListView(
@@ -284,7 +291,13 @@ class _FoodPageState extends State<FoodPage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          showVerificationSheet(context);
+                          if (user == null) {
+                            Get.to(() => const LoginPage());
+                          } else if (user.phoneVerification == false) {
+                            showVerificationSheet(context);
+                          } else {
+                            print("Place Order");
+                          }
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 12.w),
