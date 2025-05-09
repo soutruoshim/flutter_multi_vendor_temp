@@ -4,8 +4,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:foodly/common/back_ground_container.dart';
+import 'package:foodly/common/custom_button.dart';
 import 'package:foodly/constants/constants.dart';
 import 'package:foodly/controllers/user_location_controller.dart';
+import 'package:foodly/views/auth/widget/email_textfield.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -109,9 +113,54 @@ class _ShippingAddressState extends State<ShippingAddress> {
     final locationController = Get.put(UserLocationController());
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: kOffWhite,
         elevation: 0,
         title: const Text('Shipping Address'),
+        leading: Obx(
+          () => Padding(
+            padding: EdgeInsets.only(right: 0.w),
+            child: locationController.tabIndex == 0
+                ? IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(
+                      AntDesign.closecircleo,
+                      color: kRed,
+                    ),
+                  )
+                : IconButton(
+                    onPressed: () {
+                      locationController.setTabIndex = 0;
+                      _pageController.previousPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeIn);
+                    },
+                    icon: const Icon(
+                      AntDesign.leftcircleo,
+                      color: kDark,
+                    ),
+                  ),
+          ),
+        ),
+        actions: [
+          Obx(() => locationController.tabIndex == 1
+              ? const SizedBox.shrink()
+              : Padding(
+                  padding: EdgeInsets.only(top: 8.h),
+                  child: IconButton(
+                      onPressed: () {
+                        locationController.setTabIndex = 1;
+                        _pageController.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeIn);
+                      },
+                      icon: const Icon(
+                        AntDesign.rightcircleo,
+                        color: kDark,
+                      )),
+                ))
+        ],
       ),
       body: SizedBox(
         height: height,
@@ -166,7 +215,7 @@ class _ShippingAddressState extends State<ShippingAddress> {
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      color: Colors.white,
+                      color: kOffWhite,
                       child: TextField(
                         controller: _searchController,
                         onChanged: _onSearchChanged,
@@ -204,8 +253,35 @@ class _ShippingAddressState extends State<ShippingAddress> {
                 )
               ],
             ),
-            Container(
-              color: Colors.blue,
+            BackGroundContainer(
+              color: kOffWhite,
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                children: [
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  EmailTextField(
+                    controller: _searchController,
+                    hintText: "Address",
+                    prefixIcon: const Icon(Ionicons.location_sharp),
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  EmailTextField(
+                    controller: _postalCode,
+                    hintText: "Postal Code",
+                    prefixIcon: const Icon(Ionicons.location_sharp),
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  CustomButton(onTap: () {}, btnHeight: 45, text: "S U B M I T")
+                ],
+              ),
             ),
           ],
         ),

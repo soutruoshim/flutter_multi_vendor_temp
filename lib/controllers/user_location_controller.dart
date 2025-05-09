@@ -7,6 +7,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class UserLocationController extends GetxController {
+  RxInt _tabIndex = 0.obs;
+
+  int get tabIndex => _tabIndex.value;
+
+  set setTabIndex(int value) {
+    _tabIndex.value = value;
+  }
+  
   LatLng position = const LatLng(0, 0);
 
   void setPosition(LatLng value) {
