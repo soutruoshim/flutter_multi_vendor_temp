@@ -2,13 +2,17 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:foodly/common/app_style.dart';
 import 'package:foodly/common/back_ground_container.dart';
 import 'package:foodly/common/custom_button.dart';
+import 'package:foodly/common/reusable_text.dart';
 import 'package:foodly/constants/constants.dart';
 import 'package:foodly/controllers/user_location_controller.dart';
+import 'package:foodly/models/address_model.dart';
 import 'package:foodly/views/auth/widget/email_textfield.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -26,6 +30,7 @@ class _ShippingAddressState extends State<ShippingAddress> {
   GoogleMapController? _mapController;
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _postalCode = TextEditingController();
+  final TextEditingController _instructions = TextEditingController();
   // _postalCode
   LatLng? _selectedPosition;
   List<dynamic> _placeList = [];
@@ -279,7 +284,56 @@ class _ShippingAddressState extends State<ShippingAddress> {
                   SizedBox(
                     height: 15.h,
                   ),
-                  CustomButton(onTap: () {}, btnHeight: 45, text: "S U B M I T")
+                  EmailTextField(
+                    controller: _instructions,
+                    hintText: "Delivery Instructions",
+                    prefixIcon: const Icon(Ionicons.add_circle),
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ReusableText(
+                            text: "Set address as default",
+                            style: appStyle(12, kDark, FontWeight.w600)),
+                        Obx(() => CupertinoSwitch(
+                            thumbColor: kSecondary,
+                            trackColor: kPrimary,
+                            value: locationController.isDefault,
+                            onChanged: (value) {
+                              locationController.setIsDefault = value;
+                            }))
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  CustomButton(
+                      onTap: () {
+                        if (_searchController.text.isNotEmpty &&
+                            _postalCode.text.isNotEmpty &&
+                            _instructions.text.isNotEmpty) {
+                          AddressModel model = AddressModel(
+                              addressLine1: _searchController.text,
+                              postalCode: _postalCode.text,
+                              addressModelDefault: locationController.isDefault,
+                              deliveryInstructions: _instructions.text,
+                              latitude: _selectedPosition!.latitude,
+                              longitude: _selectedPosition!.longitude);
+
+                          String data = addressModelToJson(model);
+
+                          locationController.addAddress(data);
+                        }
+                      },
+                      btnHeight: 45,
+                      text: "S U B M I T")
                 ],
               ),
             ),
