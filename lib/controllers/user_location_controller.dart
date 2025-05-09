@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_final_fields
 
 import 'dart:convert';
-
 import 'package:foodly/constants/constants.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,8 +9,8 @@ import 'package:http/http.dart' as http;
 class UserLocationController extends GetxController {
   LatLng position = const LatLng(0, 0);
 
-  void setPosition(LatLng position) {
-    position = position;
+  void setPosition(LatLng value) {
+    value = position;
     update();
   }
 
