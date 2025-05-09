@@ -7,6 +7,8 @@ import 'package:foodly/common/custom_button.dart';
 import 'package:foodly/common/custom_container.dart';
 import 'package:foodly/common/reusable_text.dart';
 import 'package:foodly/constants/constants.dart';
+import 'package:foodly/controllers/verification_controller.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
@@ -15,6 +17,7 @@ class VerificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(VerificationController());
     return Scaffold(
       backgroundColor: kPrimary,
       appBar: AppBar(
@@ -59,16 +62,17 @@ class VerificationPage extends StatelessWidget {
                     onCodeChanged: (String code) {},
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     onSubmit: (String verificationCode) {
-                      print(verificationCode);
+                      controller.setCode = verificationCode;
                     },
                   ),
-
                   SizedBox(
                     height: 20.h,
                   ),
                   CustomButton(
                     text: "V E R I F Y   A C C O U N T",
-                    onTap: () {},
+                    onTap: () {
+                      controller.verificationFunction();
+                    },
                     btnHeight: 35.h,
                     btnWidth: width,
                   ),
