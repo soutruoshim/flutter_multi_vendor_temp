@@ -7,8 +7,8 @@ import 'package:foodly/controllers/login_controller.dart';
 import 'package:foodly/models/login_response.dart';
 import 'package:foodly/views/auth/login_redirect.dart';
 import 'package:foodly/views/auth/verification_page.dart';
+import 'package:foodly/views/orders/user_orders.dart';
 import 'package:foodly/views/profile/addresses_page.dart';
-import 'package:foodly/views/profile/shipping_address.dart';
 import 'package:foodly/views/profile/widget/profile_app_bar.dart';
 import 'package:foodly/constants/constants.dart';
 import 'package:foodly/views/profile/widget/profile_tile_widget.dart';
@@ -61,7 +61,9 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   ProfileTileWidget(
                       onTap: () {
-                        Get.to(() => const LoginRedirect());
+                        Get.to(() => const UserOrders(),
+                            transition: Transition.cupertino,
+                            duration: const Duration(milliseconds: 900));
                       },
                       title: "My Orders",
                       icon: Ionicons.fast_food_outline),
@@ -93,9 +95,8 @@ class ProfilePage extends StatelessWidget {
                   ProfileTileWidget(
                       onTap: () {
                         Get.to(() => const Addresses(),
-                        transition: Transition.rightToLeft,
-                        duration: const Duration(milliseconds: 900)
-                        );
+                            transition: Transition.rightToLeft,
+                            duration: const Duration(milliseconds: 900));
                       },
                       title: "Shipping Address",
                       icon: SimpleLineIcons.location_pin),

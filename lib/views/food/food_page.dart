@@ -12,11 +12,17 @@ import 'package:foodly/constants/constants.dart';
 import 'package:foodly/controllers/cart_controller.dart';
 import 'package:foodly/controllers/foods_controller.dart';
 import 'package:foodly/controllers/login_controller.dart';
+import 'package:foodly/hooks/fetch_default.dart';
 import 'package:foodly/hooks/fetch_restaurant.dart';
+import 'package:foodly/models/addresses_response.dart';
 import 'package:foodly/models/cart_request.dart';
 import 'package:foodly/models/foods_model.dart';
 import 'package:foodly/models/login_response.dart';
+import 'package:foodly/models/order_request.dart';
+import 'package:foodly/models/restaurants_model.dart';
 import 'package:foodly/views/auth/login_page.dart';
+import 'package:foodly/views/orders/order_page.dart';
+import 'package:foodly/views/profile/shipping_address.dart';
 import 'package:foodly/views/restaurant/restaurant_page.dart';
 import 'package:get/get.dart';
 
@@ -38,12 +44,17 @@ class _FoodPageState extends State<FoodPage> {
     final cartController = Get.put(CartController());
     LoginResponse? user;
     final hookResult = useFetchRestaurant(widget.food.restaurant);
+    final data = useFetchDefault();
+    AddressResponse? address = data.data;
+    RestaurantsModel? restaurant = hookResult.data;
     final controller = Get.put(FoodController());
     final loginController = Get.put(LoginController());
 
+   
+
     user = loginController.getUserInfo();
     controller.loadAdditives(widget.food.additives);
-    return Scaffold(
+    return address == null ? const ShippingAddress() : Scaffold(
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -300,7 +311,27 @@ class _FoodPageState extends State<FoodPage> {
                           } else if (user.phoneVerification == false) {
                             showVerificationSheet(context);
                           } else {
-                            print("Place Order");
+                            double price =
+                                (widget.food.price + controller.additivePrice) *
+                                    controller.count.value;
+
+                            OrderItem item = OrderItem(
+                                foodId: widget.food.id,
+                                quantity: controller.count.value,
+                                price: price,
+                                additives: controller.getCartAdditive(),
+                                instructions: _preferences.text);
+
+                            Get.to(
+                              () => OrderPage(
+                                item: item,
+                                restaurant: restaurant,
+                                food: widget.food,
+                                address: address,
+                              ),
+                              transition: Transition.cupertino,
+                              duration: const Duration(milliseconds: 900),
+                            );
                           }
                         },
                         child: Padding(
@@ -312,11 +343,11 @@ class _FoodPageState extends State<FoodPage> {
                         ),
                       ),
                       GestureDetector(
-                      
                         onTap: () {
-                             double price = (widget.food.price +
-                            controller.additivePrice) * controller.count.value; 
-                          
+                          double price =
+                              (widget.food.price + controller.additivePrice) *
+                                  controller.count.value;
+
                           var data = CartRequest(
                               productId: widget.food.id,
                               additives: controller.getCartAdditive(),

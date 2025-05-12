@@ -5,7 +5,6 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:foodly/common/app_style.dart';
 import 'package:foodly/common/reusable_text.dart';
 import 'package:foodly/constants/constants.dart';
-import 'package:foodly/constants/uidata.dart';
 import 'package:foodly/controllers/cart_controller.dart';
 import 'package:foodly/models/cart_request.dart';
 import 'package:foodly/models/foods_model.dart';
