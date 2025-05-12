@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:foodly/common/address_bottom_sheet.dart';
 import 'package:foodly/common/app_style.dart';
 import 'package:foodly/common/custom_button.dart';
 import 'package:foodly/common/custom_text_field.dart';
@@ -22,9 +23,9 @@ import 'package:foodly/models/order_request.dart';
 import 'package:foodly/models/restaurants_model.dart';
 import 'package:foodly/views/auth/login_page.dart';
 import 'package:foodly/views/orders/order_page.dart';
-import 'package:foodly/views/profile/shipping_address.dart';
 import 'package:foodly/views/restaurant/restaurant_page.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class FoodPage extends StatefulHookWidget {
   const FoodPage({super.key, required this.food});
@@ -41,6 +42,10 @@ class _FoodPageState extends State<FoodPage> {
 
   @override
   Widget build(BuildContext context) {
+    final box = GetStorage();
+
+    var addressTrigger = box.read('defaultAddress');
+
     final cartController = Get.put(CartController());
     LoginResponse? user;
     final hookResult = useFetchRestaurant(widget.food.restaurant);
@@ -50,11 +55,9 @@ class _FoodPageState extends State<FoodPage> {
     final controller = Get.put(FoodController());
     final loginController = Get.put(LoginController());
 
-   
-
     user = loginController.getUserInfo();
     controller.loadAdditives(widget.food.additives);
-    return address == null ? const ShippingAddress() : Scaffold(
+    return Scaffold(
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -310,6 +313,8 @@ class _FoodPageState extends State<FoodPage> {
                             Get.to(() => const LoginPage());
                           } else if (user.phoneVerification == false) {
                             showVerificationSheet(context);
+                          } else if (addressTrigger == false) {
+                            showAddressSheet(context);
                           } else {
                             double price =
                                 (widget.food.price + controller.additivePrice) *

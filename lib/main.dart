@@ -5,13 +5,13 @@ import 'package:foodly/constants/constants.dart';
 import 'package:foodly/firebase_options.dart';
 import 'package:foodly/views/entrypoint.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
-Widget defaultHome =  MainScreen();
+Widget defaultHome = MainScreen();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
